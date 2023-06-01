@@ -52,4 +52,22 @@ export class User {
     const hash = await bcrypt.hash(password, this.hashSalt);
     return hash === this.password;
   }
+
+  constructor(user?: Partial<User>) {
+    this.id = user?.id;
+    this.email = user?.email;
+    this.fullname = user?.fullname;
+    this.phone = user?.phone;
+    this.gender = user?.gender;
+    this.age = user?.age;
+    this.role = user?.role;
+    this.isActive = user?.isActive;
+    this.hashSalt = user?.hashSalt;
+    this.password = user?.password;
+    this.createdAt = user?.createdAt;
+    this.updatedAt = user?.updatedAt;
+    this.deletedAt = user?.deletedAt;
+  }
 }
+
+

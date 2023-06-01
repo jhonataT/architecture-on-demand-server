@@ -41,10 +41,14 @@ export class UsersController {
     }
   }
 
-  @Get(':id')
+  @Get(':userId')
   @UseGuards(AuthGuard('jwt'))
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+  async findOne(@Param('userId') userId: string): Promise<ReturnUserDto> {
+    try {
+      return await this.usersService.findOne(userId);
+    } catch(error) {
+      throw new InternalServerErrorException(error);
+    }
   }
 
   @Post()
@@ -59,14 +63,14 @@ export class UsersController {
     }
   }
 
-  @Put(':id')
+  @Put(':userId')
   @UseGuards(AuthGuard('jwt'))
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+  update(@Param('userId') userId: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.update(userId, updateUserDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  @Delete(':userId')
+  remove(@Param('userId') userId: string) {
+    return this.usersService.softDelete(userId);
   }
 }
