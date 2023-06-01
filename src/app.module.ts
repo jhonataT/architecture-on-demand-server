@@ -6,6 +6,7 @@ import { typeOrmConfig } from './configs/typeorm.config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
+import { WorkRequestsModule } from './work-requests/work-requests.module';
 
 @Module({
   imports: [
@@ -14,7 +15,8 @@ import { AuthModule } from './auth/auth.module';
     }),
     TypeOrmModule.forRoot(typeOrmConfig),
     UsersModule,
-    AuthModule
+    AuthModule,
+    WorkRequestsModule
   ],
   controllers: [AppController],
   providers: [AppService],
