@@ -94,7 +94,7 @@ describe('UsersService', () => {
     })
 
     it('Should throw a not found exception', () => {
-      // Arrange
+      // Act
       jest.spyOn(userRepository, 'findOne').mockRejectedValueOnce(new Error());
 
       // Assert
@@ -126,8 +126,8 @@ describe('UsersService', () => {
       expect(userRepository.save).toHaveBeenCalledTimes(1);
     });
 
-    it('Should thorw an exception', () => {
-      // Arrange
+    it('Should throw an exception', () => {
+      // Act
       jest.spyOn(userRepository, 'save').mockRejectedValueOnce(new Error());
 
       // Assert

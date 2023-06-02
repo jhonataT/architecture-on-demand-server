@@ -39,7 +39,7 @@ export class WorkRequestsService {
       const query: { status?: "Waiting" | "Accepted" | "Refused" } = request.query;
       
       return await this.workRepository.find({
-        where: { architect: { id: architectId }, status: query.status || In(["Waiting", "Accepted", "Refused"]) },
+        where: { architect: { id: architectId }, status: query?.status || In(["Waiting", "Accepted", "Refused"]) },
         relations: ['client', 'architect']
       }); 
     } catch(error) {
