@@ -2,6 +2,8 @@
 
 *Esta é a documentação da API NESTJS para serviços de arquitetura, que descreve os detalhes e endpoints disponíveis para interagir com o sistema.*
 
+> Swagger Documentation -> http://68.183.127.52:3000/api
+
 
 ## Pré-requisitos
 
