@@ -175,7 +175,7 @@ describe('UsersService', () => {
     });
 
     it('Should throw a ForbiddenException if an error occurs during delete', () => {
-      // Arrange
+      // Act
       jest.spyOn(userRepository, 'softDelete').mockRejectedValueOnce(new Error());
 
       // Assert
