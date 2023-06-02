@@ -1,9 +1,10 @@
-import { Repository } from 'typeorm';
+import { In, IsNull, Not, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { CreateWorkRequestDto } from '../dto/create-work-request.dto';
 import { UpdateWorkRequestDto } from '../dto/update-work-request.dto';
 import { WorkRequested } from './../entities/work-requested.entity';
+import { Request } from 'express';
 
 @Injectable()
 export class WorkRequestsService {
@@ -25,6 +26,7 @@ export class WorkRequestsService {
     try {
       return await this.workRepository.find({
         where: { client: { id: clientId } },
+        select: ['id', 'description', 'status', 'client', 'architect', 'createdAt'],
         relations: ['client', 'architect']
       }); 
     } catch(error) {
@@ -32,10 +34,12 @@ export class WorkRequestsService {
     }
   }
 
-  async findAllByArchitect(architectId: string): Promise<CreateWorkRequestDto[]> {
+  async findAllByArchitect(architectId: string, request: Request): Promise<CreateWorkRequestDto[]> {
     try {
+      const query: { status?: "Waiting" | "Accepted" | "Refused" } = request.query;
+      
       return await this.workRepository.find({
-        where: { architect: { id: architectId } },
+        where: { architect: { id: architectId }, status: query.status || In(["Waiting", "Accepted", "Refused"]) },
         relations: ['client', 'architect']
       }); 
     } catch(error) {
@@ -48,6 +52,18 @@ export class WorkRequestsService {
       return await this.workRepository.findOne({
         where: { id: workId },
         relations: ['client', 'architect']
+      });
+    } catch(error) {
+      throw new NotFoundException(error.message)
+    }
+  }
+
+  async findAllDeleted(architectId: string): Promise<CreateWorkRequestDto[]> {
+    try {
+      return await this.workRepository.find({
+        where: { architect: { id: architectId }, deletedAt: Not(IsNull()) },
+        relations: ['client', 'architect'],
+        withDeleted: true
       });
     } catch(error) {
       throw new NotFoundException(error.message)

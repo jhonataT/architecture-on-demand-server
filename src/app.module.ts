@@ -10,9 +10,7 @@ import { WorkRequestsModule } from './work-requests/work-requests.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      envFilePath: 'development.env'
-    }),
+    ConfigModule.forRoot({ envFilePath: 'development.env' }),
     TypeOrmModule.forRoot(typeOrmConfig),
     UsersModule,
     AuthModule,

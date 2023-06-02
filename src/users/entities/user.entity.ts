@@ -23,6 +23,9 @@ export class User {
 
   @Column({ nullable: false, type: 'varchar', length: 50 })
   gender: string;
+
+  @Column({ nullable: false, type: 'varchar', length: 50, default: '' })
+  cau: string | null;
   
   @Column({ nullable: false, type: 'int' })
   age: number;
@@ -57,6 +60,7 @@ export class User {
     this.id = user?.id;
     this.email = user?.email;
     this.fullname = user?.fullname;
+    this.cau = user?.cau;
     this.phone = user?.phone;
     this.gender = user?.gender;
     this.age = user?.age;

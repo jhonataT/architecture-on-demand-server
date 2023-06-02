@@ -6,6 +6,7 @@ import {
     IsEmail,
     MaxLength,
     MinLength,
+    IsEmpty,
 } from "class-validator";
 
 export class CreateUserDto {
@@ -32,6 +33,13 @@ export class CreateUserDto {
         message: 'O nome deve ter menos de 200 caracteres',
     })
     fullname: string;
+
+    @ApiProperty()
+    @IsString()
+    @MaxLength(50, {
+        message: 'O CAU deve ter menos de 50 caracteres',
+    })
+    cau?: string;
 
     @ApiProperty()
     @IsString()

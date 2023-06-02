@@ -7,8 +7,10 @@ import {
   Param,
   Delete,
   UseGuards,
-  InternalServerErrorException
+  InternalServerErrorException,
+  Req
 } from '@nestjs/common';
+import { Request } from 'express';
 import { WorkRequestsService } from '../services/work-requests.service';
 import { CreateWorkRequestDto } from '../dto/create-work-request.dto';
 import { UpdateWorkRequestDto } from '../dto/update-work-request.dto';
@@ -40,9 +42,12 @@ export class WorkRequestsController {
 
   @Get('/architect/:architectId')
   @UseGuards(AuthGuard('jwt'))
-  async findAllByArchitect(@Param('architectId') architectId: string): Promise<CreateWorkRequestDto[]> {
+  async findAllByArchitect(
+    @Param('architectId') architectId: string,
+    @Req() request: Request
+  ): Promise<CreateWorkRequestDto[]> {
     try {
-      return await this.workRequestsService.findAllByArchitect(architectId);
+      return await this.workRequestsService.findAllByArchitect(architectId, request);
     } catch(error) {
       throw new InternalServerErrorException(error);
     }
@@ -54,6 +59,16 @@ export class WorkRequestsController {
   async findOne(@Param('workId') workId: string): Promise<CreateWorkRequestDto> {
     try {
       return await this.workRequestsService.findOne(workId);
+    } catch(error) {
+      throw new InternalServerErrorException(error);
+    }
+  }
+
+  @Get('/deleted/:architectId')
+  @UseGuards(AuthGuard('jwt'))
+  async findAllDeleted(@Param('architectId') architectId: string): Promise<CreateWorkRequestDto[]> {
+    try {
+      return await this.workRequestsService.findAllDeleted(architectId);
     } catch(error) {
       throw new InternalServerErrorException(error);
     }
