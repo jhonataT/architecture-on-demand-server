@@ -27,6 +27,10 @@ export class ReturnUserDto {
     gender?: string;
 
     @ApiProperty()
+    @IsString()
+    cau?: string;
+
+    @ApiProperty()
     @IsNumber()
     age?: number;
 

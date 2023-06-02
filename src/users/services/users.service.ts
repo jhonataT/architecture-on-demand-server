@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -14,51 +14,60 @@ export class UsersService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<ReturnUserDto> {
-    const newSalt = await bcrypt.genSalt();
-
-    const user = await this.userRepository.save({
-      ...createUserDto,
-      password: await this.hashPassword(createUserDto.password, newSalt),
-      hashSalt: newSalt
-    });
-
-    delete user.password;
-    delete user.hashSalt;
-
-    return user;
-  }
-
   async findAllByType(userType: 'CLIENT' | 'ARCHITECT'): Promise<ReturnUserDto[]> {
-    const users = await this.userRepository.find({
+    return await this.userRepository.find({
       where: { role: userType, isActive: true },
       select: ['id', 'fullname', 'email', 'isActive', 'role'],
     });
-    
-    return users;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(userId: string): Promise<ReturnUserDto> {
+    try {
+      return await this.userRepository.findOne({
+        where: { id: userId },
+        select: ['id', 'fullname', 'email', 'isActive', 'role'],
+      }); 
+    } catch(error) {
+      throw new NotFoundException(error.message)
+    }
   }
 
-  async findOneByEmail(email: string): Promise<ReturnUserDto | null> {
-    const user = await this.userRepository.findOneBy({
-      email
-    });
-
-    delete user.password;
-    delete user.hashSalt;
-
-    return user;
+  async create(createUserDto: CreateUserDto): Promise<ReturnUserDto> {
+    try {
+      const newSalt = await bcrypt.genSalt();
+      const userDataToSave = this.userRepository.create({
+        ...createUserDto,
+        password: await this.hashPassword(createUserDto.password, newSalt),
+        hashSalt: newSalt
+      });
+  
+      const user = await this.userRepository.save(userDataToSave);
+  
+      delete user.password;
+      delete user.hashSalt;
+  
+      return user;
+    } catch(error) {
+      throw new ForbiddenException(error.message);
+    }
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(userId: string, updateUserDto: UpdateUserDto): Promise<ReturnUserDto> {
+    try {
+      await this.userRepository.update({ id: userId }, updateUserDto);
+      return await this.findOne(userId);
+    } catch(error) {
+      throw new ForbiddenException(error.message);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async softDelete(userId: string): Promise<void> {
+    try {
+      await this.userRepository.softDelete({ id: userId });
+      return;
+    } catch(error) {
+      throw new ForbiddenException(error.message);
+    }
   }
 
   private async hashPassword(password: string, salt: string): Promise<string> {
