@@ -40,7 +40,7 @@ Antes de executar a API, certifique-se de ter o seguinte instalado:
     DATABASE_HOSTNAME=localhost
     ```
         
-3.  Crie um container Docker do banco postgresql:
+4.  Crie um container Docker do banco postgresql:
 
     **bash:**
     ```bash
@@ -51,14 +51,14 @@ Antes de executar a API, certifique-se de ter o seguinte instalado:
     > docker run --name architects-system -e POSTGRES_USER=localuser -e POSTGRES_PASSWORD=userpass -e POSTGRES_DB=database -p 5432:5432 -d postgres
     ```
 
-4.  Com o seu container rodando, execute a Api:
+5.  Com o seu container rodando, execute a Api:
 
     **bash:**
     ```bash
     > yarn run start:dev
     ```
 
-5.  A API estará disponível em http://localhost:3000.
+6.  A API estará disponível em http://localhost:3000.
 
 ## Como executar os testes
 
