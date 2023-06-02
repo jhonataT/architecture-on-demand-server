@@ -12,7 +12,7 @@ Antes de executar a API, certifique-se de ter o seguinte instalado:
  - **Docker** (versão 20.10.23 ou superior)
  -  **Git** (versão 2.40.0 ou superior)
 
-## Como rodar
+## Como executar a Api
 
 > Siga as etapas abaixo para executar a API em um ambiente de desenvolvimento.
 
@@ -28,17 +28,27 @@ Antes de executar a API, certifique-se de ter o seguinte instalado:
     ```bash
     > cd architecture-on-demand-server
     > yarn install
-    ``` 
+    ```
+
+3. Caso não exista, na raiz do seu projeto, um arquivo chamado `.env`, crie esse arquivo com o seguinte conteúdo:
+
+    ```
+    DATABASE_USERNAME=localuser
+    DATABASE_PASSWORD=userpass
+    DATABASE_PORT=5432
+    DATABASE_NAME=database
+    DATABASE_HOSTNAME=localhost
+    ```
         
- 3.  Crie um container Docker do banco postgresql.
+3.  Crie um container Docker do banco postgresql:
 
     **bash:**
     ```bash
-        > docker pull postgres
+    > docker pull postgres
     ```
 
     ```bash
-        > docker run --name architects-system -e POSTGRES_USER=localuser -e POSTGRES_PASSWORD=userpass -e POSTGRES_DB=database -p 5432:5432 -d postgres
+    > docker run --name architects-system -e POSTGRES_USER=localuser -e POSTGRES_PASSWORD=userpass -e POSTGRES_DB=database -p 5432:5432 -d postgres
     ```
 
 4.  Com o seu container rodando, execute a Api:
@@ -50,11 +60,11 @@ Antes de executar a API, certifique-se de ter o seguinte instalado:
 
 5.  A API estará disponível em http://localhost:3000.
 
-## Como rodar os testes
+## Como executar os testes
 
 > Siga as etapas abaixo para executar os testes unitários em um ambiente de desenvolvimento.
 
-1. Com a api já instalada e configurada, rode o comando:
+1. Com a Api já instalada e configurada, rode o comando:
 	
     **bash:**
 	```bash
